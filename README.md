@@ -122,7 +122,7 @@
 ### 9.2 Campos por entidade
 <!-- Use tipos simples: uuid, texto, número, data/hora, booleano, char. -->
 
-### Usuario
+### Usuarios
 | Campo           | Tipo                          | Obrigatório | Exemplo            |
 |-----------------|-------------------------------|-------------|--------------------|
 | id              | número                        | sim         | 1                  |
@@ -133,14 +133,65 @@
 | dataCriacao     | data/hora                     | sim         | 2025-08-20 14:30   |
 | dataAtualizacao | data/hora                     | sim         | 2025-08-20 15:10   |
 
-### Chamado
+### Chamados
 | Campo           | Tipo               | Obrigatório | Exemplo                 |
 |-----------------|--------------------|-------------|-------------------------|
 | id              | número             | sim         | 2                       |
-| Usuario_id      | número (fk)        | sim         | 1                       |
+| Usuarios_id     | número (fk)        | sim         | 1                       |
 | texto           | texto              | sim         | "Erro ao compilar"      |
 | estado          | char               | sim         | 'a' \| 'f'              |
 | urlImagem       | texto              | não         | '/img/ícone.png'        |     
+| dataCriacao     | data/hora          | sim         | 2025-08-20 14:35        |
+| dataAtualizacao | data/hora          | sim         | 2025-08-20 14:50        |
+
+### Arquivos
+| Campo           | Tipo               | Obrigatório | Exemplo                 |
+|-----------------|--------------------|-------------|-------------------------|
+| id              | número             | sim         | 2                       |
+| Usuarios_id     | número (fk)        | sim         | 1                       |
+| nome            | texto              | sim         | "index.html"            |
+| tipo            | texto              | sim         | "html"                  |
+| caminho         | texto              | sim         | '/Usuario_1/index.html' |     
+| dataCriacao     | data/hora          | sim         | 2025-08-20 14:35        |
+| dataAtualizacao | data/hora          | sim         | 2025-08-20 14:50        |
+
+
+### Discos
+| Campo           | Tipo               | Obrigatório | Exemplo                 |
+|-----------------|--------------------|-------------|-------------------------|
+| id              | número             | sim         | 2                       |
+| Usuarios_id     | número (fk)        | sim         | 1                       |
+| artista         | texto              | sim         | "Fulano"                |
+| gênero          | texto              | sim         | "Sapecada"              |
+| álbum           | texto              | sim         | 'Gaúcho Raiz'           |     
+| preço           | numérico           | sim         | 50.50                   |     
+| urlImagem       | texto              | sim         | '/Usuario_1/capa.png'   |     
+| descrição       | texto              | sim         | '.....'                 |     
+| faixas          | texto              | sim         | '1 - ...; 2 - ...'      |     
+| dataCriacao     | data/hora          | sim         | 2025-08-20 14:35        |
+| dataAtualizacao | data/hora          | sim         | 2025-08-20 14:50        |
+
+### Encomendas
+| Campo           | Tipo               | Obrigatório | Exemplo                 |
+|-----------------|--------------------|-------------|-------------------------|
+| id              | número             | sim         | 2                       |
+| Usuarios_id     | número (fk)        | sim         | 1                       |
+| material        | texto              | sim         | "Couro"                 |
+| chumbo          | inteiro            | sim         | 5                       |
+| pesoLaco        | numérico           | sim         | 700.5                   |     
+| cor             | texto              | sim         | "Azul"                  |     
+| dataCriacao     | data/hora          | sim         | 2025-08-20 14:35        |
+| dataAtualizacao | data/hora          | sim         | 2025-08-20 14:50        |
+
+### Artes
+| Campo           | Tipo               | Obrigatório | Exemplo                 |
+|-----------------|--------------------|-------------|-------------------------|
+| id              | número             | sim         | 2                       |
+| Usuarios_id     | número (fk)        | sim         | 1                       |
+| urlImagem       | texto              | sim         | "/Usuario_1/image1.png" |
+| nome            | texto              | sim         | "Fulano"                |
+| descrição       | texto              | sim         | "Imagem muito legal"    |     
+| palavrasChave   | texto              | sim         | "Pixel Art; Anatomia;"  |     
 | dataCriacao     | data/hora          | sim         | 2025-08-20 14:35        |
 | dataAtualizacao | data/hora          | sim         | 2025-08-20 14:50        |
 
@@ -166,7 +217,7 @@ CREATE TABLE Usuarios (
 
 CREATE TABLE Chamados (
   id                SERIAL       NOT NULL PRIMARY KEY,
-  usuario_id        BIGINT       NOT NULL REFERENCES Usuarios(id),
+  Usuarios_id       BIGINT       NOT NULL REFERENCES Usuarios(id),
   texto             TEXT         NOT NULL,
   estado            CHAR(1)      NOT NULL CHECK (estado IN ('a','f')), -- a=aberto, f=fechado
   urlImagem         VARCHAR(255),

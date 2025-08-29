@@ -166,7 +166,7 @@ CREATE TABLE Usuarios (
 
 CREATE TABLE Chamados (
   id                SERIAL       NOT NULL PRIMARY KEY,
-  usuario_id        BIGINT       NOT NULL REFERENCES usuarios(id),
+  usuario_id        BIGINT       NOT NULL REFERENCES Usuarios(id),
   texto             TEXT         NOT NULL,
   estado            CHAR(1)      NOT NULL CHECK (estado IN ('a','f')), -- a=aberto, f=fechado
   urlImagem         VARCHAR(255),
@@ -175,7 +175,7 @@ CREATE TABLE Chamados (
 );
 
 INSERT INTO Usuarios (nome, email, senha_hash, papel) VALUES('Usuário', 'user@user.com.br', '123', 0);
-INSERT INTO Usuarios (nome, email, senha_hash, papel) VALUES('Admin', 'admin@admin.com.br', '123', 0);
+INSERT INTO Usuarios (nome, email, senha_hash, papel) VALUES('Admin', 'admin@admin.com.br', '123', 1);
 
 INSERT INTO Chamados (usuario_id, texto, estado) VALUES(1, 'Preciso de ajuda com JS', 'a');
 ```

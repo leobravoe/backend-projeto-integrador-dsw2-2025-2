@@ -140,7 +140,7 @@
 | Usuario_id      | número (fk)        | sim         | 1                       |
 | texto           | texto              | sim         | "Erro ao compilar"      |
 | estado          | char               | sim         | 'a' \| 'f'              |
-| urlImagem       | texto              | não         | 'ícone.png'             |     
+| urlImagem       | texto              | não         | '/img/ícone.png'        |     
 | dataCriacao     | data/hora          | sim         | 2025-08-20 14:35        |
 | dataAtualizacao | data/hora          | sim         | 2025-08-20 14:50        |
 
@@ -165,13 +165,13 @@ CREATE TABLE Usuarios (
 );
 
 CREATE TABLE Chamados (
-  id                SERIAL      NOT NULL PRIMARY KEY,
-  usuario_id        BIGINT      NOT NULL REFERENCES usuarios(id),
-  texto             TEXT        NOT NULL,
-  estado            CHAR(1)     NOT NULL CHECK (estado IN ('a','f')), -- a=aberto, f=fechado
-
-  data_criacao      TIMESTAMP   DEFAULT now(),
-  data_atualizacao  TIMESTAMP   DEFAULT now()
+  id                SERIAL       NOT NULL PRIMARY KEY,
+  usuario_id        BIGINT       NOT NULL REFERENCES usuarios(id),
+  texto             TEXT         NOT NULL,
+  estado            CHAR(1)      NOT NULL CHECK (estado IN ('a','f')), -- a=aberto, f=fechado
+  urlImagem         VARCHAR(255),
+  data_criacao      TIMESTAMP    DEFAULT now(),
+  data_atualizacao  TIMESTAMP    DEFAULT now()
 );
 
 INSERT INTO Usuarios (nome, email, senha_hash, papel) VALUES('Usuário', 'user@user.com.br', '123', 0);

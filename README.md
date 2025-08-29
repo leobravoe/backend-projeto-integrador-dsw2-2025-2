@@ -152,6 +152,7 @@
 
 ### 9.4 Modelagem do banco de dados no POSTGRES
 
+```sql
 CREATE TABLE Usuarios (
   id                SERIAL       NOT NULL PRIMARY KEY,
   nome              VARCHAR(255) NOT NULL,
@@ -175,3 +176,4 @@ INSERT INTO Usuarios (nome, email, senha_hash, papel) VALUES('Usuário', 'user@u
 INSERT INTO Usuarios (nome, email, senha_hash, papel) VALUES('Admin', 'admin@admin.com.br', '123', 0);
 
 INSERT INTO Chamados (usuario_id, texto, estado) VALUES(1, 'Preciso de ajuda com JS', 'a');
+```

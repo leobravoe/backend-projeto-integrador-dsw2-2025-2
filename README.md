@@ -140,6 +140,7 @@
 | Usuario_id      | número (fk)        | sim         | 1                       |
 | texto           | texto              | sim         | "Erro ao compilar"      |
 | estado          | char               | sim         | 'a' \| 'f'              |
+| urlImagem       | texto              | não         | 'ícone.png'             |     
 | dataCriacao     | data/hora          | sim         | 2025-08-20 14:35        |
 | dataAtualizacao | data/hora          | sim         | 2025-08-20 14:50        |
 
@@ -156,7 +157,7 @@
 CREATE TABLE Usuarios (
   id                SERIAL       NOT NULL PRIMARY KEY,
   nome              VARCHAR(255) NOT NULL,
-  email             VARCHAR(255) NOT NULL UNIQUE,               -- usa citext p/ unicidade sem diferenciar maiúsc./minúsc.
+  email             VARCHAR(255) NOT NULL UNIQUE,
   senha_hash        VARCHAR(255) NOT NULL,
   papel             SMALLINT     NOT NULL CHECK (papel IN (0,1)),  -- 0=aluno, 1=professor
   data_criacao      TIMESTAMP    DEFAULT now(),
@@ -168,6 +169,7 @@ CREATE TABLE Chamados (
   usuario_id        BIGINT      NOT NULL REFERENCES usuarios(id),
   texto             TEXT        NOT NULL,
   estado            CHAR(1)     NOT NULL CHECK (estado IN ('a','f')), -- a=aberto, f=fechado
+
   data_criacao      TIMESTAMP   DEFAULT now(),
   data_atualizacao  TIMESTAMP   DEFAULT now()
 );

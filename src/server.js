@@ -1,8 +1,8 @@
 // server.js
 import express from "express";
 import { pool } from "./db.js";
-
 const app = express();
+// Adiciona um middleware para reconhecer o JSON enviado dentro do body
 app.use(express.json());
 
 // listar produtos

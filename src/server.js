@@ -30,13 +30,13 @@ app.get("/produtos", async (_req, res) => {
 });
 // MOSTRAR (show)
 app.get("/produtos/:id", async (req, res) => {
-    // é criada a variável id como constante
-    // O resultado de Number(req.params.id) é um numero ou NaN (quando falha a conversão)
+    // É criada a variável id como constante
+    // O resultado de Number(req.params.id) é um número ou NaN (quando falha a conversão)
     const id = Number(req.params.id);
     if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ erro: "id inválido" });
     try {
-        // crio uma variável constante chamada result 
-        // Espero a função .query do objeto pool executar
+        // Crio uma variável constante chamada result 
+        // Espero a função .query do objeto pool executar (await)
         // Depois que ela terminar de executar o valor é armazenado em result
         const result = await pool.query("SELECT * FROM produtos WHERE id = $1", [id]);
         console.log(result);

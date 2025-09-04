@@ -218,7 +218,7 @@ CREATE TABLE Usuarios (
 CREATE TABLE Chamados (
   id                SERIAL       NOT NULL PRIMARY KEY,
   Usuarios_id       BIGINT       NOT NULL REFERENCES Usuarios(id),
-  texto             TEXT         NOT NULL,
+  texto             VARCHAR(255) NOT NULL,
   estado            CHAR(1)      NOT NULL CHECK (estado IN ('a','f')), -- a=aberto, f=fechado
   urlImagem         VARCHAR(255),
   data_criacao      TIMESTAMP    DEFAULT now(),

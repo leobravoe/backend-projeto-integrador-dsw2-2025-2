@@ -159,7 +159,7 @@
 | Campo            | Tipo               | Obrigatório | Exemplo                 |
 |------------------|--------------------|-------------|-------------------------|
 | id               | número             | sim         | 2                       |
-| Usuarios_id      | número (fk)        | sim         | 1                       |
+| Usuarios_id_reme | número (fk)        | sim         | 1                       |
 | Usuarios_id_dest | número (fk)        | sim         | 2                       |
 | texto            | texto              | sim         | "olá...."               |
 | dataCriacao      | data/hora          | sim         | 2025-08-20 14:35        |

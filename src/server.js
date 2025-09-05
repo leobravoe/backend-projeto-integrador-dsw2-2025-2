@@ -22,6 +22,8 @@ app.get("/", async (_req, res) => {
 // LISTAR
 app.get("/produtos", async (_req, res) => {
     try {
+        // O resultado de pool.query é um objeto que contem a chave rows
+        // O comando const { rows } cria a variável rows e coloca dentro dela o conteúdo da chave rows do objeto gerado por pool.query 
         const { rows } = await pool.query("SELECT * FROM produtos ORDER BY id DESC");
         res.json(rows);
     } catch {
@@ -30,6 +32,8 @@ app.get("/produtos", async (_req, res) => {
 });
 // MOSTRAR (show)
 app.get("/produtos/:id", async (req, res) => {
+    // Todas as variáveis que chegam dentro do objeto req são strings
+
     // É criada a variável id como constante
     // O resultado de Number(req.params.id) é um número ou NaN (quando falha a conversão)
     const id = Number(req.params.id);
@@ -38,14 +42,15 @@ app.get("/produtos/:id", async (req, res) => {
         // Crio uma variável constante chamada result 
         // Espero a função .query do objeto pool executar (await)
         // Depois que ela terminar de executar o valor é armazenado em result
+        // Dentro de result tem os dados do banco que o select retorna e maior um monte de outras coisas
         const result = await pool.query("SELECT * FROM produtos WHERE id = $1", [id]);
-        console.log(result);
         // Crio uma constante com um objeto e a variável rows dentro
         // A atribuição procura dento de result uma chave com o mesmo nome da variável
         // Caso encontre essa chave, o valor dela é copiado para a variável rows
         const { rows } = result;
-        console.log("rows:", rows);
+        // Pego a primeira posição do array e verifico se ela não existe
         if (!rows[0]) return res.status(404).json({ erro: "não encontrado" });
+        // Retorna a primeira posição
         res.json(rows[0]);
     } catch {
         res.status(500).json({ erro: "erro interno" });
@@ -53,17 +58,39 @@ app.get("/produtos/:id", async (req, res) => {
 });
 // CRIAR
 app.post("/produtos", async (req, res) => {
+    // Dentro de req tenho as coisas que vem o cliente
+    // Dentro de res tenho as coisas que irão para o cliente
+
+    // O objeto enviado do cliente para o backend estará dentro do corpo da requisição
+    // Ou seja, estará dentro de req.body
+
+    // Caso 1: O objeto enviado pelo cliente tem as chaves: nome e preco
+    //      -> Nesse caso as variáveis nome e preço recebem o conteúdo do req.body
+    // Caso 2: Nada foi enviado pelo cliente ou seja, req.body é undefined
+    //      -> Nesse caso `req.body ?? {}` é visto como `undefined ?? {}`
+    //      -> Assim a operação completa seria simplificada para `const {nome, preco} = {}`
+    //      -> Desta forma as variáveis nome e preço ficariam com valor undefined
+    // Caso 3: Um json qualquer foi enviado para o backend (sem as chaves nome e preco)
+    //      -> Nesse caso as variáveis nome e preço ficariam com valor undefined
     const { nome, preco } = req.body ?? {};
     const p = Number(preco);
     // preco deve ser número >= 0
+    // !nome verifica se ela não existe
+    // preco == null verifica se o usuário mandou preco: null (que não pode aceitar) pois Number(null) é igual a 0
+    // Number.isNaN verifica se a conversão deu certo
+    // p < 0 Verifica se o numero é negativo
     if (!nome || preco == null || Number.isNaN(p) || p < 0) {
         return res.status(400).json({ erro: "nome e preco (>= 0) obrigatórios" });
     }
     try {
+        // O resultado de pool.query é um objeto que contem a chave rows
+        // O comando const { rows } cria a variável rows e coloca dentro dela o conteúdo da chave rows do objeto gerado por pool.query
         const { rows } = await pool.query(
             "INSERT INTO produtos (nome, preco) VALUES ($1, $2) RETURNING *",
             [nome, p]
         );
+        // rows contém um array com uma posição. 
+        // Nessa posição está o objeto com os dados que recém foram inseridos no banco
         res.status(201).json(rows[0]);
     } catch {
         res.status(500).json({ erro: "erro interno" });

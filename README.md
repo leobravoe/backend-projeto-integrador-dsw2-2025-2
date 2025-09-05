@@ -155,6 +155,15 @@
 | dataCriacao     | data/hora          | sim         | 2025-08-20 14:35        |
 | dataAtualizacao | data/hora          | sim         | 2025-08-20 14:50        |
 
+### Mensagens
+| Campo            | Tipo               | Obrigatório | Exemplo                 |
+|------------------|--------------------|-------------|-------------------------|
+| id               | número             | sim         | 2                       |
+| Usuarios_id      | número (fk)        | sim         | 1                       |
+| Usuarios_id_dest | número (fk)        | sim         | 2                       |
+| texto            | texto              | sim         | "olá...."               |
+| dataCriacao      | data/hora          | sim         | 2025-08-20 14:35        |
+| dataAtualizacao  | data/hora          | sim         | 2025-08-20 14:50        |
 
 ### Discos
 | Campo           | Tipo               | Obrigatório | Exemplo                 |

@@ -58,6 +58,8 @@ app.get("/produtos/:id", async (req, res) => {
 });
 // CRIAR
 app.post("/produtos", async (req, res) => {
+    // Todas as variáveis que chegam dentro do objeto req são strings
+    
     // Dentro de req tenho as coisas que vem o cliente
     // Dentro de res tenho as coisas que irão para o cliente
 

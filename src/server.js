@@ -44,7 +44,7 @@ app.get("/produtos/:id", async (req, res) => {
         // Crio uma variável constante chamada result 
         // Espero a função .query do objeto pool executar (await)
         // Depois que ela terminar de executar o valor é armazenado em result
-        // Dentro de result tem os dados do banco que o select retorna e maior um monte de outras coisas
+        // Dentro de result tem os dados do banco que o select retorna (chave rows) e mais um monte de outras coisas
         const result = await pool.query("SELECT * FROM produtos WHERE id = $1", [id]);
         // Crio uma constante com um objeto e a variável rows dentro
         // A atribuição procura dento de result uma chave com o mesmo nome da variável

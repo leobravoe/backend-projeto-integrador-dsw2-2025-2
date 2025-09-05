@@ -37,6 +37,8 @@ app.get("/produtos/:id", async (req, res) => {
     // É criada a variável id como constante
     // O resultado de Number(req.params.id) é um número ou NaN (quando falha a conversão)
     const id = Number(req.params.id);
+    // !Number.isInteger(id) verifica se o id não é um inteiro
+    // id <= 0 verifica se o id é menor ou igual a zero.
     if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ erro: "id inválido" });
     try {
         // Crio uma variável constante chamada result 
@@ -59,7 +61,7 @@ app.get("/produtos/:id", async (req, res) => {
 // CRIAR
 app.post("/produtos", async (req, res) => {
     // Todas as variáveis que chegam dentro do objeto req são strings
-    
+
     // Dentro de req tenho as coisas que vem o cliente
     // Dentro de res tenho as coisas que irão para o cliente
 

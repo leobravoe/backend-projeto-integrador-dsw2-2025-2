@@ -109,22 +109,6 @@ Exemplos de telas: **Login**, **Lista de chamados**, **Novo chamado**, **Painel 
 | dataCriacao     | data/hora                     | sim         | 2025-08-20 14:30   |
 | dataAtualizacao | data/hora                     | sim         | 2025-08-20 15:10   |
 
-#### Livros
-| Campo               | Tipo        | Obrigatório | Exemplo                                                        |
-|---------------------|-------------|-------------|----------------------------------------------------------------|
-| id                  | número      | sim         | 2                                                              |
-| Usuarios_id         | número (fk) | sim         | 1                                                              |
-| titulo              | texto       | sim         | "Ed & Lorraine Warren: Demonologistas: Arquivos sobrenaturais" |
-| autores             | texto       | sim         | "Gerald Brittle e Ed Warren "                                  |
-| genero              | char        | sim         | 't' = terror \| 'r' = romance \|  'a' = ação \| 'f' = fantasia |
-| sinopse             | texto       | sim         | "Eles enfrentaram os mistérios mais sinistros do..."           |
-| classificacaoEtaria | número      | sim         | 18                                                             |
-| dataEscrita         | data        | não         | 2025-08-20                                                     |
-| idioma              | texto       | sim         | "Português do Brasil"                                          |
-| urlImagem           | texto       | não         | '/img/capa.png'                                                |
-| dataCriacao         | data/hora   | sim         | 2025-08-20 14:50                                               |
-| dataAtualizacao     | data/hora   | sim         | 2025-08-20 14:50                                               |
-
 #### Chamados
 | Campo           | Tipo        | Obrigatório | Exemplo            |
 |-----------------|-------------|-------------|--------------------|

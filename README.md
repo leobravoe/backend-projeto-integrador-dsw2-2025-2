@@ -109,18 +109,6 @@ Exemplos de telas: **Login**, **Lista de chamados**, **Novo chamado**, **Painel 
 | dataCriacao     | data/hora                     | sim         | 2025-08-20 14:30   |
 | dataAtualizacao | data/hora                     | sim         | 2025-08-20 15:10   |
 
-#### Chamados
-| Campo           | Tipo        | Obrigatório | Exemplo            |
-|-----------------|-------------|-------------|--------------------|
-| id              | número      | sim         | 2                  |
-| Usuarios_id     | número (fk) | sim         | 1                  |
-| texto           | texto       | sim         | "Erro ao compilar" |
-| estado          | char        | sim         | 'a' \| 'f'         |
-| urlImagem       | texto       | não         | '/img/icone.png'   |
-| dataCriacao     | data/hora   | sim         | 2025-08-20 14:35   |
-| dataAtualizacao | data/hora   | sim         | 2025-08-20 14:50   |
-
-
 #### Livros
 | Campo               | Tipo        | Obrigatório | Exemplo                                                        |
 |---------------------|-------------|-------------|----------------------------------------------------------------|
@@ -136,6 +124,18 @@ Exemplos de telas: **Login**, **Lista de chamados**, **Novo chamado**, **Painel 
 | urlImagem           | texto       | não         | '/img/capa.png'                                                |
 | dataCriacao         | data/hora   | sim         | 2025-08-20 14:50                                               |
 | dataAtualizacao     | data/hora   | sim         | 2025-08-20 14:50                                               |
+
+#### Chamados
+| Campo           | Tipo        | Obrigatório | Exemplo            |
+|-----------------|-------------|-------------|--------------------|
+| id              | número      | sim         | 2                  |
+| Usuarios_id     | número (fk) | sim         | 1                  |
+| texto           | texto       | sim         | "Erro ao compilar" |
+| estado          | char        | sim         | 'a' \| 'f'         |
+| urlImagem       | texto       | não         | '/img/icone.png'   |
+| dataCriacao     | data/hora   | sim         | 2025-08-20 14:35   |
+| dataAtualizacao | data/hora   | sim         | 2025-08-20 14:50   |
+
 
 ### 9.3 Relações entre entidades
 - Um **Usuario** tem muitos **Chamados**. (1→N)  

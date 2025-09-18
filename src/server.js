@@ -108,34 +108,29 @@ app.get("/api/chamados/:id", async (req, res) => {
 });
 
 // -----------------------------------------------------------------------------
-// CRIAR (POST /produtos)
+// CRIAR (POST /chamados)
 // -----------------------------------------------------------------------------
-// Objetivo: inserir um novo produto. Espera-se receber JSON com { nome, preco }.
+// Objetivo: inserir um novo chamado. Espera-se receber JSON com { Usuarios_id, texto, estado, urlImagem }.
 // Observações:
 // - req.body pode ser "undefined" se o cliente não enviar JSON; por isso usamos "?? {}"
 //   para ter um objeto vazio como padrão (evita erro ao desestruturar).
-app.post("/produtos", async (req, res) => {
-    // Extraímos "nome" e "preco" do corpo. Se req.body for undefined, vira {}.
-    const { nome, preco } = req.body ?? {};
+app.post("/api/chamados", async (req, res) => {
+    const { Usuarios_id, texto, estado, urlImagem } = req.body ?? {};
+    const uId = Number(Usuarios_id);
 
-    // Convertendo "preco" em número. Se falhar, vira NaN.
-    const p = Number(preco);
-
-    // Validações:
-    // - !nome → nome ausente, vazio, null, etc. (falsy)
-    // - preco == null → captura especificamente null (e também undefined)
-    //   Observação: usamos == de propósito para cobrir null/undefined juntos.
-    // - Number.isNaN(p) → conversão falhou (ex.: "abc")
-    // - p < 0 → preço negativo não é permitido
-    if (!nome || preco == null || Number.isNaN(p) || p < 0) {
-        return res.status(400).json({ erro: "nome e preco (>= 0) obrigatórios" });
+    if (!texto || typeof(texto) !== 'string' ||
+        !estado || typeof(estado) !== 'string' ||
+        !urlImagem || typeof(urlImagem) !== 'string' ||
+        Usuarios_id == null || Number.isNaN(uId) || uId < 1
+    ) {
+        return res.status(400).json({ erro: "Texto, estado, urlImage precisam ser do tipo string e não vazios. Usuarios_id precisa ser um número inteirio maior que 0" });
     }
 
     try {
         // INSERT com retorno: RETURNING * devolve a linha criada.
         const { rows } = await pool.query(
-            "INSERT INTO produtos (nome, preco) VALUES ($1, $2) RETURNING *",
-            [nome, p]
+            "INSERT INTO chamados (Usuarios_id, texto, estado, urlImagem) VALUES ($1, $2, $3, $4) RETURNING *",
+            [Usuarios_id, texto, estado, urlImagem]
         );
 
         // rows[0] contém o objeto recém-inserido (com id gerado, etc.)
@@ -150,23 +145,34 @@ app.post("/produtos", async (req, res) => {
 // -----------------------------------------------------------------------------
 // Objetivo: substituir TODOS os campos do produto (put = envia o recurso completo).
 // Requer: { nome, preco } válidos.
-app.put("/produtos/:id", async (req, res) => {
+app.put("/api/chamados/:id", async (req, res) => {
     const id = Number(req.params.id);
-    const { nome, preco } = req.body ?? {};
-    const p = Number(preco);
+    const { Usuarios_id, texto, estado, urlImagem } = req.body ?? {};
+    const uId = Number(Usuarios_id);
 
     if (!Number.isInteger(id) || id <= 0) {
         return res.status(400).json({ erro: "id inválido" });
     }
-    if (!nome || preco == null || Number.isNaN(p) || p < 0) {
-        return res.status(400).json({ erro: "nome e preco (>= 0) obrigatórios" });
+
+    if (!texto || typeof(texto) !== 'string' ||
+        !estado || typeof(estado) !== 'string' ||
+        !urlImagem || typeof(urlImagem) !== 'string' ||
+        Usuarios_id == null || Number.isNaN(uId) || uId < 1
+    ) {
+        return res.status(400).json({ erro: "Texto, estado, urlImage precisam ser do tipo string e não vazios. Usuarios_id precisa ser um número inteirio maior que 0" });
     }
 
     try {
         // Atualiza ambos os campos sempre (sem manter valores antigos).
         const { rows } = await pool.query(
-            "UPDATE produtos SET nome = $1, preco = $2 WHERE id = $3 RETURNING *",
-            [nome, p, id]
+            `UPDATE chamados SET 
+             Usuarios_id = $1, 
+             texto = $2 
+             estado = $3
+             urlImagem = $4
+             WHERE id = $5
+             RETURNING *`,
+            [Usuarios_id, texto, estado, urlImagem, id]
         );
 
         // Se não atualizou nenhuma linha, o id não existia.

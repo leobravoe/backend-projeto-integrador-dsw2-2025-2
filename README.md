@@ -13,9 +13,6 @@
 8. [Tecnologias](#8-tecnologias)  
 9. [Plano de Dados (Dia 0)](#9-plano-de-dados-dia-0--somente-itens-1–3)  
 10. [Como rodar localmente (passo a passo)](#-como-rodar-localmente-passo-a-passo)  
-11. [Referência de API (iniciante)](#-referência-de-api-iniciante)  
-12. [Erros comuns](#-erros-comuns)  
-13. [Glossário rápido](#-glossário-rápido)
 
 ---
 

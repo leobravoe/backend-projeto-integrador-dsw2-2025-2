@@ -24,7 +24,7 @@ app.get("/", async (_req, res) => {
 
 app.get("/api/chamados", async (_req, res) => {
     try {
-        const { rows } = await pool.query("SELECT * FROM chamados ORDER BY id DESC");
+        const { rows } = await pool.query(`SELECT * FROM Chamados ORDER BY "id" DESC`);
         res.json(rows);
     } catch (error) {
         console.error("Erro em GET /api/chamados:", error);
@@ -40,7 +40,7 @@ app.get("/api/chamados/:id", async (req, res) => {
     }
 
     try {
-        const { rows } = await pool.query("SELECT * FROM chamados WHERE id = $1", [id]);
+        const { rows } = await pool.query(`SELECT * FROM Chamados WHERE "id" = $1`, [id]);
 
         if (rows.length === 0) {
             return res.status(404).json({ erro: "Chamado não encontrado" });
@@ -65,8 +65,12 @@ app.post("/api/chamados", async (req, res) => {
     }
 
     try {
-        const { rows } = await pool.query(
-            "INSERT INTO chamados (Usuarios_id, texto, estado, urlImagem) VALUES ($1, $2, $3, $4) RETURNING *",
+        const { rows } = await pool.query(`
+            INSERT INTO Chamados 
+            ("Usuarios_id", "texto", "estado", "urlImagem") 
+            VALUES 
+            ($1, $2, $3, $4) 
+            RETURNING *`,
             [Usuarios_id, texto, estado, urlImagem]
         );
 
@@ -95,10 +99,13 @@ app.put("/api/chamados/:id", async (req, res) => {
     }
 
     try {
-        const { rows } = await pool.query(
-            `UPDATE chamados 
-               SET Usuarios_id = $1, texto = $2, estado = $3, urlImagem = $4
-               WHERE id = $5
+        const { rows } = await pool.query(`
+            UPDATE Chamados SET 
+               "Usuarios_id" = $1, 
+               "texto" = $2, 
+               "estado" = $3, 
+               "urlImagem" = $4
+            WHERE "id" = $5
                RETURNING *`,
             [Usuarios_id, texto, estado, urlImagem, id]
         );
@@ -131,15 +138,14 @@ app.patch("/api/chamados/:id", async (req, res) => {
     }
 
     try {
-        const { rows } = await pool.query(
-            `UPDATE chamados
-               SET 
-                    Usuarios_id = COALESCE($1, Usuarios_id), 
-                    texto         = COALESCE($2, texto), 
-                    estado        = COALESCE($3, estado), 
-                    urlImagem     = COALESCE($4, urlImagem)
-               WHERE id = $5
-               RETURNING *`,
+        const { rows } = await pool.query(`
+            UPDATE Chamados SET 
+                "Usuarios_id"   = COALESCE($1, "Usuarios_id"), 
+                "texto"         = COALESCE($2, "texto"), 
+                "estado"        = COALESCE($3, "estado"), 
+                "urlImagem"     = COALESCE($4, "urlImagem")
+            WHERE "id" = $5
+            RETURNING *`,
             [Usuarios_id ?? null, texto ?? null, estado ?? null, urlImagem ?? null, id]
         );
 
@@ -162,7 +168,7 @@ app.delete("/api/chamados/:id", async (req, res) => {
     }
 
     try {
-        const result = await pool.query("DELETE FROM chamados WHERE id = $1", [id]);
+        const result = await pool.query(`DELETE FROM Chamados WHERE "id" = $1`, [id]);
 
         if (result.rowCount === 0) {
             return res.status(404).json({ erro: "Chamado não encontrado" });

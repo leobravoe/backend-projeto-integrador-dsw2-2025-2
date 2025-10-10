@@ -129,38 +129,27 @@ Exemplos de telas: **Login**, **Lista de chamados**, **Novo chamado**, **Painel 
 ### 9.4 Modelagem do banco de dados no POSTGRES
 
 ```sql
-\echo '--- Resetando banco chamados_api_db ---'
-
-\encoding UTF8
 
 SET client_encoding = 'UTF8';
 
-\set ON_ERROR_STOP on
-
-DROP DATABASE IF EXISTS chamados_api_db;
-
-CREATE DATABASE chamados_api_db;
-
-\connect chamados_api_db
-
 CREATE TABLE IF NOT EXISTS Usuarios (
-  id                SERIAL       PRIMARY KEY,
-  nome              VARCHAR(255) NOT NULL,
-  email             VARCHAR(255) NOT NULL UNIQUE,
-  senha_hash        VARCHAR(255) NOT NULL,
-  papel             SMALLINT     NOT NULL CHECK (papel IN (0,1)),  -- 0=aluno, 1=professor
-  data_criacao      TIMESTAMP    NOT NULL DEFAULT now(),
-  data_atualizacao  TIMESTAMP    NOT NULL DEFAULT now()
+  "id"                SERIAL       PRIMARY KEY,
+  "nome"              VARCHAR(255) NOT NULL,
+  "email"             VARCHAR(255) NOT NULL UNIQUE,
+  "senha_hash"        VARCHAR(255) NOT NULL,
+  "papel"             SMALLINT     NOT NULL CHECK (papel IN (0,1)),  -- 0=aluno, 1=professor
+  "data_criacao"      TIMESTAMP    NOT NULL DEFAULT now(),
+  "data_atualizacao"  TIMESTAMP    NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS Chamados (
-  id                SERIAL       PRIMARY KEY,
-  Usuarios_id       INTEGER      NOT NULL REFERENCES Usuarios(id) ON DELETE CASCADE,
-  texto             VARCHAR(255) NOT NULL,
-  estado            CHAR(1)      NOT NULL CHECK (estado IN ('a','f')), -- a=aberto, f=fechado
-  urlImagem         VARCHAR(255),
-  data_criacao      TIMESTAMP    NOT NULL DEFAULT now(),
-  data_atualizacao  TIMESTAMP    NOT NULL DEFAULT now()
+  "id"                SERIAL       PRIMARY KEY,
+  "Usuarios_id"       INTEGER      NOT NULL REFERENCES Usuarios("id") ON DELETE CASCADE,
+  "texto"             VARCHAR(255) NOT NULL,
+  "estado"            CHAR(1)      NOT NULL CHECK (estado IN ('a','f')), -- a=aberto, f=fechado
+  "urlImagem"         VARCHAR(255),
+  "data_criacao"      TIMESTAMP    NOT NULL DEFAULT now(),
+  "data_atualizacao"  TIMESTAMP    NOT NULL DEFAULT now()
 );
 
 INSERT INTO Usuarios (nome, email, senha_hash, papel) VALUES
@@ -179,7 +168,7 @@ INSERT INTO Usuarios (nome, email, senha_hash, papel) VALUES
 ('Karen Oliveira',         'karen@exemplo.com.br',         '$2b$12$9x2GHtGECKzuQCJS65.1klPkri2xpNTvbEZLDlrVsvVBLZp4cnKlc', 0),
 ('Luiz Fernando Teixeira', 'luiz.teixeira@exemplo.com.br', '$2b$12$woeItTdOln/h4lP8Dc65k1XqFI5fOlSADwHsQk/T50ES8K9I0dpn4', 1);
 
-INSERT INTO Chamados (Usuarios_id, texto, estado) VALUES
+INSERT INTO Chamados ("Usuarios_id", "texto", "estado") VALUES
 (1,  'Preciso de ajuda com JS', 'a'),
 (1,  'Erro ao instalar dependências no npm',          'a'),
 (2,  'Dúvida sobre rotas no Express',                 'f'),
@@ -192,7 +181,7 @@ INSERT INTO Chamados (Usuarios_id, texto, estado) VALUES
 (9,  'Padronizar mensagens de erro da API',           'a'),
 (10, 'Timeout ao fazer fetch no front',               'a');
 
-INSERT INTO Chamados (Usuarios_id, texto, estado, urlImagem) VALUES
+INSERT INTO Chamados ("Usuarios_id", "texto", "estado", "urlImagem") VALUES
 (11, 'Layout da lista não carrega no CSS',            'a', '/img/wireframe-lista.png'),
 (12, 'Bug ao atualizar produto (PUT)',                'f', '/img/bug-put.png'),
 (13, 'Imagem não aparece no README',                  'a', '/img/readme-img.png'),
@@ -201,11 +190,8 @@ INSERT INTO Chamados (Usuarios_id, texto, estado, urlImagem) VALUES
 (4,  'Mensagem de validação pouco clara',             'a', '/img/validacao-msg.png'),
 (5,  'Dúvida sobre COALESCE no SQL',                  'a', '/img/sql-coalesce.png'),
 (6,  'Diferença entre 200 e 201 no retorno',          'f', '/img/http-status.png');
-\echo '--- Reset concluido com sucesso ---'
-```
 
-> ✅ **Dica para iniciantes**: `SERIAL` cria um número automático (1, 2, 3…).  
-> ✅ `CHECK (estado IN ('a','f'))` impede salvar valores diferentes de **a** (aberto) e **f** (fechado).
+```
 
 ---
 
@@ -217,15 +203,20 @@ INSERT INTO Chamados (Usuarios_id, texto, estado, urlImagem) VALUES
 
 ### 2) Criar arquivo `.env` na raiz do projeto
 ```env
-# Porta da API
+#PORTA DO SERVIDOR DO EXPRESS
 PORT=3000
 
-# Postgres
+# CONFIGURAÇÃO POSTGRES
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
-DB_PASSWORD=postgres
-DB_DATABASE=atendeai_db
+DB_PASSWORD=aluno
+DB_DATABASE=chamados_api_db
+PG_DATABASE_ADMIN=postgres
+DB_DATABASE_ADMIN_PASSWORD=aluno
+
+# CAMINHO PARA O SQL DO BANCO EM POSTGRES
+DB_DATABASE_FILE_PATH=./src/database/banco.sql
 ```
 
 ### 3) Instalar dependências e iniciar
@@ -238,59 +229,4 @@ npm run dev   # ou: node server.js / npm start (conforme seu package.json)
 - Abra o **psql** (ou pgAdmin) e execute o script SQL da seção **9.4**.  
 - Ajuste usuário/senha/porta conforme o seu Postgres.
 
-### 5) Testar rapidamente com `curl`
-```bash
-# Lista endpoints raiz
-curl http://localhost:3000/
-
-# Lista produtos (se você tiver a API de produtos ligada à mesma base/stack)
-curl http://localhost:3000/api/produtos
-
-# Criar um produto
-curl -X POST http://localhost:3000/api/produtos   -H "Content-Type: application/json"   -d '{"nome":"Caneta","preco":5.5}'
-
-# Mostrar por id
-curl http://localhost:3000/api/produtos/1
-
-# Atualizar (PUT)
-curl -X PUT http://localhost:3000/api/produtos/1   -H "Content-Type: application/json"   -d '{"nome":"Caneta Azul","preco":6.0}'
-
-# Atualizar parcialmente (PATCH)
-curl -X PATCH http://localhost:3000/api/produtos/1   -H "Content-Type: application/json"   -d '{"preco":6.2}'
-
-# Deletar
-curl -X DELETE http://localhost:3000/api/produtos/1
-```
-
 ---
-
-## 📚 Referência de API (iniciante)
-
-### Convenções
-- **Corpo JSON** sempre com `Content-Type: application/json`.  
-- **Status comuns**:  
-  - `200 OK` (deu certo), `201 Created` (criado), `204 No Content` (deletado)  
-  - `400 Bad Request` (dados inválidos), `404 Not Found` (não achou), `500 Internal Server Error` (erro inesperado)
-
-### Erro-padrão (exemplo)
-```json
-{ "erro": "mensagem explicando o problema" }
-```
-
-> Ex.: `{"erro": "id inválido"}` quando o id não é inteiro positivo.
-
----
-
-## 🐞 Erros comuns
-- **`req.body` veio `undefined`** → faltou `app.use(express.json())` ou o cliente não enviou `Content-Type: application/json`.  
-- **Conexão com banco falhou** → confira `.env` (host, porta, usuário, senha, banco).  
-- **“relation does not exist”** → as tabelas não foram criadas; execute o SQL da seção 9.4.  
-- **Senha em texto puro** → no exemplo é didático; em produção, use **hash** (ex.: bcrypt).
-
----
-
-## 🧭 Glossário rápido
-- **Fila**: lista ordenada de chamados (normalmente por hora de criação).  
-- **Chamado**: pedido de ajuda feito pelo aluno.  
-- **Estado**: `'a'` (aberto) ou `'f'` (fechado).  
-- **Dia 0**: primeiro recorte funcional mínimo (o mínimo para aprender/testar).

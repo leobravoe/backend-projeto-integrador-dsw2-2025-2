@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS "Usuarios" (
   "nome"              VARCHAR(255) NOT NULL,
   "email"             VARCHAR(255) NOT NULL UNIQUE,
   "senha_hash"        VARCHAR(255) NOT NULL,
-  "papel"             SMALLINT     NOT NULL CHECK ("papel" IN (0,1)),  -- 0=aluno, 1=professor
+  "papel"             SMALLINT     NOT NULL CHECK ("papel" IN (0,1)), 
   "data_criacao"      TIMESTAMP    NOT NULL DEFAULT now(),
   "data_atualizacao"  TIMESTAMP    NOT NULL DEFAULT now()
 );
@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS "Chamados" (
   "id"                SERIAL       PRIMARY KEY,
   "Usuarios_id"       INTEGER      NOT NULL REFERENCES "Usuarios"("id"),
   "texto"             VARCHAR(255) NOT NULL,
-  "estado"            CHAR(1)      NOT NULL CHECK ("estado" IN ('a','f')), -- a=aberto, f=fechado
-  "urlImagem"         VARCHAR(255),
+  "estado"            CHAR(1)      NOT NULL CHECK ("estado" IN ('a','f')),
+  "url_imagem"        VARCHAR(255),
   "data_criacao"      TIMESTAMP    NOT NULL DEFAULT now(),
   "data_atualizacao"  TIMESTAMP    NOT NULL DEFAULT now()
 );
@@ -49,7 +49,7 @@ INSERT INTO "Chamados" ("Usuarios_id", "texto", "estado") VALUES
 (9,  'Padronizar mensagens de erro da API',           'a'),
 (10, 'Timeout ao fazer fetch no front',               'a');
 
-INSERT INTO "Chamados" ("Usuarios_id", "texto", "estado", "urlImagem") VALUES
+INSERT INTO "Chamados" ("Usuarios_id", "texto", "estado", "url_imagem") VALUES
 (11, 'Layout da lista não carrega no CSS',            'a', '/img/wireframe-lista.png'),
 (12, 'Bug ao atualizar produto (PUT)',                'f', '/img/bug-put.png'),
 (13, 'Imagem não aparece no README',                  'a', '/img/readme-img.png'),

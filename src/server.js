@@ -10,9 +10,9 @@ app.get("/", async (_req, res) => {
         const rotas = {
             "LISTAR": "GET /api/chamados",
             "OBTER_UM": "GET /api/chamados/:id",
-            "CRIAR": "POST /api/chamados BODY: { 'Usuarios_id': number, 'texto': string, 'estado': string, 'urlImagem'?: string }",
-            "SUBSTITUIR": "PUT /api/chamados/:id BODY: { 'Usuarios_id': number, 'texto': string, 'estado': string, 'urlImagem'?: string }",
-            "ATUALIZAR_PARCIAL": "PATCH /api/chamados/:id BODY: { 'Usuarios_id'?: number, 'texto'?: string, 'estado'?: string, 'urlImagem'?: string }",
+            "CRIAR": "POST /api/chamados BODY: { 'Usuarios_id': number, 'texto': string, 'estado': string, 'url_imagem'?: string }",
+            "SUBSTITUIR": "PUT /api/chamados/:id BODY: { 'Usuarios_id': number, 'texto': string, 'estado': string, 'url_imagem'?: string }",
+            "ATUALIZAR_PARCIAL": "PATCH /api/chamados/:id BODY: { 'Usuarios_id'?: number, 'texto'?: string, 'estado'?: string, 'url_imagem'?: string }",
             "DELETAR": "DELETE /api/chamados/:id",
         };
         res.json(rotas);
@@ -54,7 +54,7 @@ app.get("/api/chamados/:id", async (req, res) => {
 });
 
 app.post("/api/chamados", async (req, res) => {
-    const { Usuarios_id, texto, estado, urlImagem } = req.body ?? {};
+    const { Usuarios_id, texto, estado, url_imagem } = req.body ?? {};
 
     if (
         !Usuarios_id || !Number.isInteger(Usuarios_id) || Usuarios_id <= 0 ||
@@ -67,11 +67,11 @@ app.post("/api/chamados", async (req, res) => {
     try {
         const { rows } = await pool.query(`
             INSERT INTO "Chamados" 
-            ("Usuarios_id", "texto", "estado", "urlImagem") 
+            ("Usuarios_id", "texto", "estado", "url_imagem") 
             VALUES 
             ($1, $2, $3, $4) 
             RETURNING *`,
-            [Usuarios_id, texto, estado, urlImagem]
+            [Usuarios_id, texto, estado, url_imagem]
         );
 
         res.status(201).json(rows[0]);
@@ -83,7 +83,7 @@ app.post("/api/chamados", async (req, res) => {
 
 app.put("/api/chamados/:id", async (req, res) => {
     const id = Number(req.params.id);
-    const { Usuarios_id, texto, estado, urlImagem } = req.body ?? {};
+    const { Usuarios_id, texto, estado, url_imagem } = req.body ?? {};
 
     if (!Number.isInteger(id) || id <= 0) {
         return res.status(400).json({ erro: "ID inválido" });
@@ -93,7 +93,7 @@ app.put("/api/chamados/:id", async (req, res) => {
         !Usuarios_id || !Number.isInteger(Usuarios_id) || Usuarios_id <= 0 ||
         !texto || typeof texto !== "string" ||
         !estado || typeof estado !== "string" ||
-        urlImagem === undefined
+        url_imagem === undefined
     ) {
         return res.status(400).json({ erro: "Corpo da requisição incompleto. Todos os campos são obrigatórios para substituição (PUT)." });
     }
@@ -104,10 +104,10 @@ app.put("/api/chamados/:id", async (req, res) => {
                "Usuarios_id" = $1, 
                "texto" = $2, 
                "estado" = $3, 
-               "urlImagem" = $4
+               "url_imagem" = $4
             WHERE "id" = $5
                RETURNING *`,
-            [Usuarios_id, texto, estado, urlImagem, id]
+            [Usuarios_id, texto, estado, url_imagem, id]
         );
 
         if (rows.length === 0) {
@@ -123,7 +123,7 @@ app.put("/api/chamados/:id", async (req, res) => {
 
 app.patch("/api/chamados/:id", async (req, res) => {
     const id = Number(req.params.id);
-    const { Usuarios_id, texto, estado, urlImagem } = req.body ?? {};
+    const { Usuarios_id, texto, estado, url_imagem } = req.body ?? {};
 
     if (!Number.isInteger(id) || id <= 0) {
         return res.status(400).json({ erro: "ID inválido" });
@@ -143,10 +143,10 @@ app.patch("/api/chamados/:id", async (req, res) => {
                 "Usuarios_id"   = COALESCE($1, "Usuarios_id"), 
                 "texto"         = COALESCE($2, "texto"), 
                 "estado"        = COALESCE($3, "estado"), 
-                "urlImagem"     = COALESCE($4, "urlImagem")
+                "url_imagem"     = COALESCE($4, "url_imagem")
             WHERE "id" = $5
             RETURNING *`,
-            [Usuarios_id ?? null, texto ?? null, estado ?? null, urlImagem ?? null, id]
+            [Usuarios_id ?? null, texto ?? null, estado ?? null, url_imagem ?? null, id]
         );
 
         if (rows.length === 0) {

@@ -24,7 +24,7 @@ app.get("/", async (_req, res) => {
 
 app.get("/api/chamados", async (_req, res) => {
     try {
-        const { rows } = await pool.query(`SELECT * FROM Chamados ORDER BY "id" DESC`);
+        const { rows } = await pool.query(`SELECT * FROM "Chamados" ORDER BY "id" DESC`);
         res.json(rows);
     } catch (error) {
         console.error("Erro em GET /api/chamados:", error);
@@ -40,7 +40,7 @@ app.get("/api/chamados/:id", async (req, res) => {
     }
 
     try {
-        const { rows } = await pool.query(`SELECT * FROM Chamados WHERE "id" = $1`, [id]);
+        const { rows } = await pool.query(`SELECT * FROM "Chamados" WHERE "id" = $1`, [id]);
 
         if (rows.length === 0) {
             return res.status(404).json({ erro: "Chamado não encontrado" });
@@ -66,7 +66,7 @@ app.post("/api/chamados", async (req, res) => {
 
     try {
         const { rows } = await pool.query(`
-            INSERT INTO Chamados 
+            INSERT INTO "Chamados" 
             ("Usuarios_id", "texto", "estado", "urlImagem") 
             VALUES 
             ($1, $2, $3, $4) 
@@ -100,7 +100,7 @@ app.put("/api/chamados/:id", async (req, res) => {
 
     try {
         const { rows } = await pool.query(`
-            UPDATE Chamados SET 
+            UPDATE "Chamados" SET 
                "Usuarios_id" = $1, 
                "texto" = $2, 
                "estado" = $3, 
@@ -139,7 +139,7 @@ app.patch("/api/chamados/:id", async (req, res) => {
 
     try {
         const { rows } = await pool.query(`
-            UPDATE Chamados SET 
+            UPDATE "Chamados" SET 
                 "Usuarios_id"   = COALESCE($1, "Usuarios_id"), 
                 "texto"         = COALESCE($2, "texto"), 
                 "estado"        = COALESCE($3, "estado"), 
@@ -168,7 +168,7 @@ app.delete("/api/chamados/:id", async (req, res) => {
     }
 
     try {
-        const result = await pool.query(`DELETE FROM Chamados WHERE "id" = $1`, [id]);
+        const result = await pool.query(`DELETE FROM "Chamados" WHERE "id" = $1`, [id]);
 
         if (result.rowCount === 0) {
             return res.status(404).json({ erro: "Chamado não encontrado" });

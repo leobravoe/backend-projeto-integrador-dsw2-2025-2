@@ -1,7 +1,11 @@
 import express from "express";
+import cors from "cors";
 import { pool } from "./db.js";
 
 const app = express();
+
+// Configura o back-end em modo permissivo
+app.use(cors());
 
 app.use(express.json());
 
